@@ -19,6 +19,12 @@ class TaskProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteTask(Task task) {
+    _tasks.remove(task);
+    Hive.box('tasksBox').delete(task.title);
+    notifyListeners();
+  }
+
   void loadTasks() {
     var box = Hive.box('tasksBox');
     _tasks = box.values.toList().cast<Task>();
