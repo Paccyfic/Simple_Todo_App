@@ -11,18 +11,77 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskProvider = Provider.of<TaskProvider>(context);
 
-    
+    Widget _buildTaskTile(Task task, TaskProvider taskProvider) {
+      return Dismissible(
+        key: Key(task.title),
+        background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerLeft,
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+        ),
+        direction: DismissDirection.startToEnd,
+        onDismissed: (direction) {
+          taskProvider.deleteTask(task);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${task.title} deleted')),
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.grey[850],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            children: [
+              Checkbox(
+                value: task.isCompleted,
+                onChanged: (value) {
+                  taskProvider.toggleComplete(task);
+                },
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task.title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      task.description,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     void _showAddTaskForm(BuildContext context) {
       showModalBottomSheet(
         context: context,
-        isScrollControlled: true, 
+        isScrollControlled: true,
         backgroundColor: Colors.grey[800],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         builder: (_) {
           return Padding(
-            padding: MediaQuery.of(context).viewInsets, 
+            padding: MediaQuery.of(context).viewInsets,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -93,8 +152,43 @@ class HomeScreen extends StatelessWidget {
       );
     }
 
+    Widget _buildTaskList() {
+      final todoTasks = taskProvider.tasks.where((task) => !task.isCompleted).toList();
+      final completedTasks = taskProvider.tasks.where((task) => task.isCompleted).toList();
+
+      return ListView(
+        padding: EdgeInsets.all(16),
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search for your task...',
+                prefixIcon: Icon(Icons.search, color: Colors.grey),
+                filled: true,
+                fillColor: Colors.grey[850],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 10),
+          Text('Todo', style: TextStyle(color: Colors.grey, fontSize: 18)),
+          SizedBox(height: 10),
+          ...todoTasks.map((task) => _buildTaskTile(task, taskProvider)).toList(),
+          SizedBox(height: 20),
+          Text('Completed', style: TextStyle(color: Colors.grey, fontSize: 18)),
+          SizedBox(height: 10),
+          ...completedTasks.map((task) => _buildTaskTile(task, taskProvider)).toList(),
+        ],
+      );
+    }
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 18, 20, 22), 
+      backgroundColor: const Color.fromARGB(255, 18, 20, 22),
       body: taskProvider.tasks.isEmpty
           ? Center(
               child: Column(
@@ -125,50 +219,10 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             )
-          : ListView.builder(
-              itemCount: taskProvider.tasks.length,
-              itemBuilder: (context, index) {
-                final task = taskProvider.tasks[index];
-                return Dismissible(
-                  key: Key(task.title),
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
-                  ),
-                  direction: DismissDirection.startToEnd,
-                  onDismissed: (direction) {
-                    taskProvider.deleteTask(task);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${task.title} deleted')),
-                    );
-                  },
-                  child: ListTile(
-                    title: Text(
-                      task.title,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    subtitle: Text(
-                      task.description,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    trailing: Checkbox(
-                      value: task.isCompleted,
-                      onChanged: (value) {
-                        taskProvider.toggleComplete(task);
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
+          : _buildTaskList(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF7B8AE0), 
-        onPressed: () => _showAddTaskForm(context), 
+        backgroundColor: Color(0xFF7B8AE0),
+        onPressed: () => _showAddTaskForm(context),
         child: Icon(Icons.add),
       ),
     );
