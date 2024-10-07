@@ -12,18 +12,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<Widget> _pages = [
-    OnboardingPage(
+    const OnboardingPage(
       title: 'Manage your tasks',
       description: 'You can easily manage all of your daily tasks in DoMe for free',
       image: 'assets/images/onboarding1.png',
     ),
-    OnboardingPage(
+    const OnboardingPage(
       title: 'Create daily routine',
       description: 'In Uptodo  you can create your personalized routine to stay productive',
       image: 'assets/images/onboarding2.png',
     ),
-    OnboardingPage(
-      title: 'Orgonaize your tasks',
+    const OnboardingPage(
+      title: 'Organize your tasks',
       description: 'You can organize your daily tasks by adding your tasks into separate categories',
       image: 'assets/images/onboarding3.png',
     ),
@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   },
-                  child: Text(
+                  child: const Text(
                     'SKIP',
                     style: TextStyle(
                       color: Colors.grey,
@@ -86,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               curve: Curves.easeIn,
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'BACK',
                             style: TextStyle(
                               color: Colors.grey,
@@ -94,7 +94,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
                         )
-                      : SizedBox(), 
+                      : const SizedBox(), 
                   Row(
                     children: List.generate(
                       _pages.length,
@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       }
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                           vertical: 12, horizontal: 24),
                       decoration: BoxDecoration(
                         color: Color(0xFF7F68F6),
@@ -125,7 +125,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                       child: Text(
                         _currentPage == _pages.length - 1 ? 'GET STARTED' : 'NEXT',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
                         ),
@@ -135,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20), 
+            const SizedBox(height: 20), 
           ],
         ),
       ),
@@ -146,7 +146,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Container(
       height: 10,
       width: _currentPage == index ? 20 : 10,
-      margin: EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         color: _currentPage == index ? Colors.white : Colors.grey,
         borderRadius: BorderRadius.circular(10),
@@ -173,7 +173,7 @@ class OnboardingPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          
+
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.35, 
             child: Image.asset(image, fit: BoxFit.contain),
@@ -182,7 +182,7 @@ class OnboardingPage extends StatelessWidget {
 
           Text(
             title,
-            style: TextStyle(
+            style:const TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -193,7 +193,7 @@ class OnboardingPage extends StatelessWidget {
           Text(
             description,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style:const TextStyle(
               color: Colors.white70,
               fontSize: 16,
             ),

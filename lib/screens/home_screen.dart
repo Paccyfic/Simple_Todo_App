@@ -17,8 +17,8 @@ class HomeScreen extends StatelessWidget {
         background: Container(
           color: Colors.red,
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Icon(
+          padding:const EdgeInsets.symmetric(horizontal: 20),
+          child: const Icon(
             Icons.delete,
             color: Colors.white,
           ),
@@ -31,8 +31,8 @@ class HomeScreen extends StatelessWidget {
           );
         },
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 5),
-          padding: EdgeInsets.all(10),
+          margin: const EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.grey[850],
             borderRadius: BorderRadius.circular(8),
@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
         context: context,
         isScrollControlled: true,
         backgroundColor: Colors.grey[800],
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         builder: (_) {
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Add Task',
                     style: TextStyle(
                       fontSize: 24,
@@ -158,9 +158,11 @@ class HomeScreen extends StatelessWidget {
 
       return ListView(
         padding: EdgeInsets.all(16),
+       
         children: [
+          SizedBox(height: 20),   
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 50),
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Search for your task...',
@@ -209,7 +211,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text(
+                  const Text(
                     'Tap + to add your tasks',
                     style: TextStyle(
                       color: Colors.grey,
@@ -221,9 +223,12 @@ class HomeScreen extends StatelessWidget {
             )
           : _buildTaskList(),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF7B8AE0),
+       shape: RoundedRectangleBorder(
+       borderRadius: BorderRadius.circular(30),
+       ),
+        backgroundColor: const Color(0xFF7B8AE0),
         onPressed: () => _showAddTaskForm(context),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
