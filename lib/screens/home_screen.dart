@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// ignore: unused_import
 import 'package:provider/provider.dart';
 import '../models/task.dart';
 import '../providers/task_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    final taskProvider = Provider.of<TaskProvider>(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _tasks = ref.watch(tasksProvider);
 
     Widget _buildTaskTile(Task task, TaskProvider taskProvider) {
       return Dismissible(
@@ -136,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                             title: _titleController.text,
                             description: _descriptionController.text,
                           );
-                          taskProvider.addTask(task);
+                          _tasks.addTask(task);
                           Navigator.of(context).pop();
                           _titleController.clear();
                           _descriptionController.clear();
@@ -153,8 +155,8 @@ class HomeScreen extends StatelessWidget {
     }
 
     Widget _buildTaskList() {
-      final todoTasks = taskProvider.tasks.where((task) => !task.isCompleted).toList();
-      final completedTasks = taskProvider.tasks.where((task) => task.isCompleted).toList();
+      final todoTasks = _tasks.tasks.where((task) => !task.isCompleted).toList();
+      final completedTasks = _tasks.tasks.where((task) => task.isCompleted).toList();
 
       return ListView(
         padding: EdgeInsets.all(16),
@@ -180,18 +182,18 @@ class HomeScreen extends StatelessWidget {
           SizedBox(height: 10),
           Text('Todo', style: TextStyle(color: Colors.grey, fontSize: 18)),
           SizedBox(height: 10),
-          ...todoTasks.map((task) => _buildTaskTile(task, taskProvider)).toList(),
+          ...todoTasks.map((task) => _buildTaskTile(task, _tasks)).toList(),
           SizedBox(height: 20),
           Text('Completed', style: TextStyle(color: Colors.grey, fontSize: 18)),
           SizedBox(height: 10),
-          ...completedTasks.map((task) => _buildTaskTile(task, taskProvider)).toList(),
+          ...completedTasks.map((task) => _buildTaskTile(task, _tasks)).toList(),
         ],
       );
     }
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 18, 20, 22),
-      body: taskProvider.tasks.isEmpty
+      body: _tasks.tasks.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
